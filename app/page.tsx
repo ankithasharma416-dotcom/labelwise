@@ -16,17 +16,17 @@ import {
 import type { Language } from "@/library/i18n";
 import { translations } from "@/library/i18n";
 
-const crops = [
-  { id: "tomato", name: "Tomato" },
-  { id: "chilli", name: "Chilli" },
-  { id: "brinjal", name: "Brinjal" },
-  { id: "okra", name: "Okra" },
-  { id: "cabbage", name: "Cabbage" },
-  { id: "potato", name: "Potato" },
-  { id: "onion", name: "Onion" },
-  { id: "cotton", name: "Cotton" },
-  { id: "other", name: "Other" },
-];
+const cropIds = [
+  "tomato",
+  "chilli",
+  "brinjal",
+  "okra",
+  "cabbage",
+  "potato",
+  "onion",
+  "cotton",
+  "other",
+] as const;
 
 type AnalysisResult =
   | {
@@ -152,9 +152,7 @@ export default function Home() {
         entry.dose_unit !== "ml_per_litre" &&
         entry.dose_unit !== "g_per_litre"
       ) {
-        setError(
-          "This dose unit is not supported by the current calculator. No amount was calculated."
-        );
+        setError(t.unitNotSupported);
         setStep(6);
         return;
       }
@@ -200,7 +198,7 @@ export default function Home() {
       setStep(5);
     } catch (err) {
       console.error(err);
-      setError("Unable to analyze the label. Please try again.");
+      setError(t.analyzeFailed);
       setStep(6);
     } finally {
       setLoading(false);
@@ -208,42 +206,46 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-green-50 px-5 py-8">
-      <div className="mx-auto max-w-md">
-        <h1 className="text-3xl font-bold text-green-900">LabelWise</h1>
+    <div className="min-h-screen bg-[#f6f1e7]">
+      <header className="bg-green-950 px-5 py-6 text-white">
+        <div className="mx-auto max-w-md">
+          <h1 className="text-3xl font-extrabold tracking-tight">
+            LabelWise
+          </h1>
+          <p className="mt-2 text-sm text-green-100">{t.tagline}</p>
+        </div>
+      </header>
 
-        <p className="mt-2 text-green-800">
-          Read your pesticide label and plan your spray. Always follow the
-          printed label and local rules.
-        </p>
-
+      <main className="mx-auto max-w-md px-5 pb-10">
         {step === 1 && (
-          <div className="mt-8 rounded-2xl bg-white p-5 shadow-sm">
-            <h2 className="text-xl font-semibold">Choose your language</h2>
+          <div className="mt-6 rounded-xl border border-stone-300 bg-white p-5 shadow-sm">
+            <h2 className="text-xl font-bold text-stone-900">
+              {t.chooseLanguage}
+            </h2>
 
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value as Language)}
-              className="mt-3 w-full rounded-xl border border-gray-300 p-3"
+              className="mt-3 w-full rounded-lg border-2 border-stone-300 p-3 text-stone-900 focus:border-green-900 focus:outline-none"
             >
               <option value="English">English</option>
-              <option value="Hindi">Hindi</option>
-              <option value="Kannada">Kannada</option>
+              <option value="Hindi">हिन्दी</option>
+              <option value="Kannada">ಕನ್ನಡ</option>
             </select>
 
-            <h2 className="mt-6 text-xl font-semibold">
-              What crop are you treating?
+            <h2 className="mt-6 text-xl font-bold text-stone-900">
+              {t.chooseCrop}
             </h2>
 
             <select
               value={selectedCrop}
               onChange={(e) => setSelectedCrop(e.target.value)}
-              className="mt-3 w-full rounded-xl border border-gray-300 p-3"
+              className="mt-3 w-full rounded-lg border-2 border-stone-300 p-3 text-stone-900 focus:border-green-900 focus:outline-none"
             >
-              <option value="">Select crop</option>
-              {crops.map((crop) => (
-                <option key={crop.id} value={crop.id}>
-                  {crop.name}
+              <option value="">{t.selectCrop}</option>
+              {cropIds.map((id) => (
+                <option key={id} value={id}>
+                  {t.crops[id]}
                 </option>
               ))}
             </select>
@@ -251,9 +253,9 @@ export default function Home() {
             <button
               disabled={!selectedCrop}
               onClick={() => setStep(2)}
-              className="mt-6 w-full rounded-xl bg-green-700 px-4 py-3 font-semibold text-white disabled:bg-gray-300"
+              className="mt-6 w-full rounded-lg bg-green-900 px-4 py-3 font-bold text-white hover:bg-green-800 disabled:cursor-not-allowed disabled:bg-stone-300 disabled:text-stone-500"
             >
-              Continue
+              {t.continue}
             </button>
           </div>
         )}
@@ -268,11 +270,13 @@ export default function Home() {
           />
         )}
 
-        {step === 3 && !loading && <TankDateStep onSubmit={handleAnalyze} />}
+        {step === 3 && !loading && (
+          <TankDateStep language={language} onSubmit={handleAnalyze} />
+        )}
 
         {loading && (
-          <div className="mt-8 rounded-2xl bg-white p-5 text-center shadow-sm">
-            <p className="font-semibold">{t.reading}</p>
+          <div className="mt-6 rounded-xl border border-stone-300 bg-white p-5 text-center shadow-sm">
+            <p className="font-bold text-stone-900">{t.reading}</p>
           </div>
         )}
 
@@ -307,7 +311,7 @@ export default function Home() {
             }}
           />
         )}
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }
