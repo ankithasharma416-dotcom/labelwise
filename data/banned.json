@@ -1,0 +1,44 @@
+{
+  "region": "India",
+  "last_verified": "2026-10-08",
+  "source": "VERIFY WITH OFFICIAL GOVERNMENT LIST",
+  "entries": [
+    {
+      "id": "paraquat",
+      "active_ingredient": "paraquat",
+      "aliases": [
+        "paraquat dichloride"
+      ],
+      "status": "VERIFY",
+      "note": "Verify current legal status before enabling."
+    },
+    {
+      "id": "monocrotophos",
+      "active_ingredient": "monocrotophos",
+      "aliases": [],
+      "status": "VERIFY",
+      "note": "Verify current legal status before enabling."
+    },
+    {
+      "id": "endosulfan",
+      "active_ingredient": "endosulfan",
+      "aliases": [],
+      "status": "VERIFY",
+      "note": "Verify current legal status before enabling."
+    },
+    {
+      "id": "carbofuran",
+      "active_ingredient": "carbofuran",
+      "aliases": [],
+      "status": "VERIFY",
+      "note": "Verify current legal status before enabling."
+    },
+    {
+      "id": "methyl parathion",
+      "active_ingredient": "methyl parathion",
+      "aliases": [],
+      "status": "VERIFY",
+      "note": "Verify current legal status before enabling."
+    }
+  ]
+}

@@ -96,4 +96,20 @@ RULES:
     No markdown.
     No explanation.
     No commentary.
+15. Field shapes:
+
+    product_name, active_ingredient and concentration are each
+    an object: {"value": string or null, "confidence": number, "source_text": string or null}.
+    concentration is the strength printed on the label, for example "20% EC".
+
+    label_language is the language of the label text, such as "English", "Hindi" or "Kannada", or null.
+
+    Each crops entry must include crop_label_text, which is the crop name
+    exactly as printed, plus dose_confidence, phi_confidence,
+    dose_source_text and phi_source_text.
+
+    ppe is an array of objects: {"item": one of gloves, mask, goggles, long_sleeves, boots, apron, hat, "source_text": exact printed text}.
+
+    warnings is an array of objects: {"type": one of water, wind, heat, bees, reentry, storage, other, "source_text": exact printed text}.
+    Use "other" if no type fits.
 `;

@@ -170,5 +170,74 @@ describe("validateExtraction", () => {
       reason: "phi_missing",
     });
   });
+    test("accepts a single dose that appears in the source text", () => {
+    const extraction: Extraction = {
+      ...validExtraction,
+      crops: [
+        {
+          ...validExtraction.crops[0],
+          dose_min: 0.3,
+          dose_max: 0.3,
+          dose_source_text: "0.3 ml per litre of water",
+        },
+      ],
+    };
+
+    const result = validateExtraction(
+      extraction,
+      "tomato"
+    );
+
+    expect(result.status).toBe("ok");
+  });
+
+
+  test("rejects a PHI number that only appears inside a larger number", () => {
+    const extraction: Extraction = {
+      ...validExtraction,
+      crops: [
+        {
+          ...validExtraction.crops[0],
+          phi_days: 7,
+          phi_source_text: "Pre-harvest interval: 17 days",
+        },
+      ],
+    };
+
+    const result = validateExtraction(
+      extraction,
+      "tomato"
+    );
+
+    expect(result).toEqual({
+      status: "cant_read",
+      reason: "phi_missing",
+    });
+  });
+
+
+  test("rejects a dose that only matches part of a decimal", () => {
+    const extraction: Extraction = {
+      ...validExtraction,
+      crops: [
+        {
+          ...validExtraction.crops[0],
+          dose_min: 3,
+          dose_max: 3,
+          dose_source_text: "0.3 ml per litre",
+        },
+      ],
+    };
+
+    const result = validateExtraction(
+      extraction,
+      "tomato"
+    );
+
+    expect(result).toEqual({
+      status: "cant_read",
+      reason: "dose_unclear",
+    });
+  });
 
 });
